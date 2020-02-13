@@ -18,8 +18,7 @@ from dataloaders.image_transforms import SquarePad, Grayscale, Brightness, Sharp
     RandomOrder, Hue, random_crop
 from collections import defaultdict
 from pycocotools.coco import COCO
-
-
+import glob
 class VG(Dataset):
     def __init__(self, mode, roidb_file=VG_SGG_FN, dict_file=VG_SGG_DICT_FN,
                  image_file=IM_DATA_FN, filter_empty_rels=True, num_im=-1, num_val_im=5000,
@@ -56,10 +55,8 @@ class VG(Dataset):
             filter_empty_rels=filter_empty_rels,
             filter_non_overlap=self.filter_non_overlap and self.is_train,
         )
-
         self.filenames = load_image_filenames(image_file)
         self.filenames = [self.filenames[i] for i in np.where(self.split_mask)[0]]
-
         self.ind_to_classes, self.ind_to_predicates = load_info(dict_file)
 
         if use_proposals:
@@ -97,8 +94,9 @@ class VG(Dataset):
             ToTensor(),
             Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
         ]
+        print("thre")
         self.transform_pipeline = Compose(tform)
-
+        print("finish init")
     @property
     def coco(self):
         """
@@ -183,7 +181,11 @@ class VG(Dataset):
                 all_rel_sets[(o0, o1)].append(r)
             gt_rels = [(k[0], k[1], np.random.choice(v)) for k,v in all_rel_sets.items()]
             gt_rels = np.array(gt_rels)
-
+        '''
+        print('gt_boxes', type(gt_boxes), gt_boxes)
+        print('gt_classes', type(self.gt_classes[index].copy()), self.gt_classes[index].copy())
+        print('gt_relations',type(gt_rels), gt_rels )
+        '''
         entry = {
             'img': self.transform_pipeline(image_unpadded),
             'img_size': im_size,
@@ -246,7 +248,6 @@ def load_image_filenames(image_file, image_dir=VG_IMAGES):
     """
     with open(image_file, 'r') as f:
         im_data = json.load(f)
-
     corrupted_ims = ['1592.jpg', '1722.jpg', '4616.jpg', '4617.jpg']
     fns = []
     for i, img in enumerate(im_data):
@@ -257,6 +258,7 @@ def load_image_filenames(image_file, image_dir=VG_IMAGES):
         filename = os.path.join(image_dir, basename)
         if os.path.exists(filename):
             fns.append(filename)
+    print(len(fns))
     assert len(fns) == 108073
     return fns
 
@@ -422,3 +424,52 @@ class VGDataLoader(torch.utils.data.DataLoader):
             **kwargs,
         )
         return train_load, val_load
+
+
+class VCRDataset(Dataset):
+    def __init__(self):
+        '''
+        self.filenames = ['1049_Harry_Potter_and_the_chamber_of_secrets_00.01.09.343-00.01.10.552@0.jpg',
+                            '1049_Harry_Potter_and_the_chamber_of_secrets_00.01.27.000-00.01.30.358@0.jpg',
+                            '1049_Harry_Potter_and_the_chamber_of_secrets_00.01.35.990-00.01.37.295@0.jpg',
+                            '1049_Harry_Potter_and_the_chamber_of_secrets_00.02.01.100-00.02.05.445@0.jpg',
+                            '1049_Harry_Potter_and_the_chamber_of_secrets_00.02.01.100-00.02.05.445@1.jpg']
+        '''
+        self.filenames = glob.glob('/home/suji/spring20/vilbert_beta/data/VCR/vcr1images/*/*.jpg')[:100]
+        tform = [
+            SquarePad(),
+            Resize(IM_SCALE),
+            ToTensor(),
+            Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
+        ]
+        self.transform_pipeline = Compose(tform)    
+    def __len__(self):
+        return len(self.filenames)
+
+    def __getitem__(self, index):
+        #image_unpadded = Image.open(os.path.join('/home/suji/spring20/vilbert_beta/data/VCR/vcr1images/lsmdc_1049_Harry_Potter_and_the_chamber_of_secrets', self.filenames[index])).convert('RGB')
+        image_unpadded = Image.open(self.filenames[index]).convert('RGB')
+        w, h = image_unpadded.size
+        box_scale_factor = BOX_SCALE / max(w, h)
+        img_scale_factor = IM_SCALE / max(w, h)
+        if h > w:
+            im_size = (IM_SCALE, int(w * img_scale_factor), img_scale_factor)
+        elif h < w:
+            im_size = (int(h * img_scale_factor), IM_SCALE, img_scale_factor)
+        else:
+            im_size = (IM_SCALE, IM_SCALE, img_scale_factor)
+
+        entry = {
+            'img': self.transform_pipeline(image_unpadded),
+            'img_size': im_size,
+            'gt_boxes': np.empty([1,1]),
+            'gt_classes': np.empty([1, 1]),
+            'gt_relations': np.empty([1,1]),
+            'scale': IM_SCALE / BOX_SCALE,  # Multiply the boxes by this.
+            'index': index,
+            'flipped': False,
+            'fn': self.filenames[index],
+        }
+        return entry
+
+

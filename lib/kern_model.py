@@ -182,7 +182,7 @@ class KERN(nn.Module):
     Knowledge-Embedded Routing Network 
     """
     def __init__(self, classes, rel_classes, mode='sgdet', num_gpus=1, 
-                 require_overlap_det=True, pooling_dim=4096, use_resnet=False, thresh=0.01,
+                 require_overlap_det=True, pooling_dim=4096, use_resnet=False, thresh=0.5,
                  use_proposals=False,
                  use_ggnn_obj=False,
                  ggnn_obj_time_step_num=3,
@@ -227,7 +227,7 @@ class KERN(nn.Module):
             thresh=thresh,
             max_per_img=64
         )
-
+        print("thresh", thresh)
 
         self.union_boxes = UnionBoxesAndFeats(pooling_size=self.pooling_size, stride=16,
                                               dim=1024 if use_resnet else 512)
@@ -349,8 +349,18 @@ class KERN(nn.Module):
             prob dists, boxes, img inds, maxscores, classes
             
         """
-
-
+        '''
+        print('x', x)
+        print('im_sizes', im_sizes)
+        print('image_offset', image_offset) 
+        print('gt_boxes', gt_boxes)
+        print('gt_classes', gt_classes)
+        print('gt_rels', gt_rels)
+        print('proposals', proposals) 
+        print('train_anchor_inds', train_anchor_inds)
+        print('return_fmap', return_fmap)
+        '''
+        gt_boxes, gt_classes, gt_rels = None, None, None
         result = self.detector(x, im_sizes, image_offset, gt_boxes, gt_classes, gt_rels, proposals,
                                train_anchor_inds, return_fmap=True)
         if result.is_none():

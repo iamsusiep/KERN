@@ -2,7 +2,6 @@
 # visualization code for sgcls task
 # in KERN root dir, run python visualization/visualize_sgcls.py -cache_dir caches/kern_sgcls.pkl -save_dir visualization/saves
 from dataloaders.visual_genome import VGDataLoader, VG
-from dataloaders.VRD import VRDDataLoader, VRD
 from graphviz import Digraph
 import numpy as np
 import torch

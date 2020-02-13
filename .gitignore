@@ -98,3 +98,19 @@ ENV/
 
 # mypy
 .mypy_cache/
+
+
+# others
+caches/
+data/stanford_filtered/VG-SGG-dicts.json
+data/stanford_filtered/VG-SGG.h5
+data/stanford_filtered/image_data.json
+data/visual_genome/
+lib/fpn/nms/_ext/
+lib/fpn/nms/src/cuda/nms.cu.o
+lib/fpn/roi_align/src/cuda/roi_align.cu.o
+prior_matrices/obj_matrix.npy
+prior_matrices/rel_matrix.npy
+vg-faster-rcnn.tar
+visualization/save/
+

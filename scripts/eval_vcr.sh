@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-python models/eval_rels.py -m sgdet -p 100 -clip 5 \
+python models/vcr_eval.py -m sgdet -p 100 -clip 5 \
 -ckpt checkpoints/kern_sgdet.tar \
 -test \
 -b 1 \
@@ -15,3 +15,4 @@ python models/eval_rels.py -m sgdet -p 100 -clip 5 \
 -ggnn_rel_output_dim 512 \
 -use_rel_knowledge \
 -rel_knowledge prior_matrices/rel_matrix.npy \
+-cache caches/kern_vcr.pkl 
