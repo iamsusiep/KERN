@@ -274,7 +274,7 @@ class ObjectDetector(nn.Module):
 
     def forward(self, x, im_sizes, image_offset,
                 gt_boxes=None, gt_classes=None, gt_rels=None, proposals=None, train_anchor_inds=None,
-                return_fmap=False):
+                return_fmap=False, fn = None):
         """
         Forward pass for detection
         :param x: Images@[batch_size, 3, IM_SIZE, IM_SIZE]

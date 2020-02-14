@@ -329,7 +329,7 @@ class KERN(nn.Module):
 
     def forward(self, x, im_sizes, image_offset,
                 gt_boxes=None, gt_classes=None, gt_rels=None, proposals=None, train_anchor_inds=None,
-                return_fmap=False):
+                return_fmap=False, fn=None):
         """
         Forward pass for detection
         :param x: Images@[batch_size, 3, IM_SIZE, IM_SIZE]
@@ -362,7 +362,7 @@ class KERN(nn.Module):
         '''
         gt_boxes, gt_classes, gt_rels = None, None, None
         result = self.detector(x, im_sizes, image_offset, gt_boxes, gt_classes, gt_rels, proposals,
-                               train_anchor_inds, return_fmap=True)
+                               train_anchor_inds, return_fmap=True, fn = fn)
         if result.is_none():
             return ValueError("heck")
 
@@ -426,6 +426,7 @@ class KERN(nn.Module):
                            result.obj_preds, rel_inds[:, 1:], rel_rep)
 
     def __getitem__(self, batch):
+        print("getitem")
         """ Hack to do multi-GPU training"""
         batch.scatter()
 
