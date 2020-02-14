@@ -75,6 +75,7 @@ target/
 # celery beat schedule file
 celerybeat-schedule
 
+checkpoints/
 # SageMath parsed files
 *.sage.py
 
@@ -114,3 +115,6 @@ prior_matrices/rel_matrix.npy
 vg-faster-rcnn.tar
 visualization/save/
 
+
+visualization/vcr_saves/
+visualization/vcr_saves.zip

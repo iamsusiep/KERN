@@ -47,7 +47,7 @@ class Blob(object):
         self.train_chunks = None
         self.proposal_chunks = None
         self.proposals = []
-
+        self.fns = []
     @property
     def is_flickr(self):
         return self.mode == 'flickr'
@@ -66,6 +66,8 @@ class Blob(object):
         :param datom:
         :return:
         """
+        if 'fn' in d.keys():
+            self.fns.append(d['fn'])
         i = len(self.imgs)
         self.imgs.append(d['img'])
 
@@ -125,8 +127,9 @@ class Blob(object):
             raise ValueError("Wrong batch size? imgs len {} bsize/gpu {} numgpus {}".format(
                 len(self.imgs), self.batch_size_per_gpu, self.num_gpus
             ))
-
+        self.fns = np.array(self.fns)
         self.imgs = Variable(torch.stack(self.imgs, 0), volatile=self.volatile)
+        print("reduce fn", self.fns)
         self.im_sizes = np.stack(self.im_sizes).reshape(
             (self.num_gpus, self.batch_size_per_gpu, 3))
 
@@ -179,6 +182,8 @@ class Blob(object):
         if self.proposal_chunks is not None:
             self.proposals = self._scatter(self.proposals, self.proposal_chunks)
 
+    def get_fns(self):
+        return self.fns
     def __getitem__(self, index):
         """
         Returns a tuple containing data
@@ -212,19 +217,30 @@ class Blob(object):
         if index == 0 and self.num_gpus == 1:
             image_offset = 0
             if self.is_train:
+                if len(self.fns):
+                    return (self.fns, self.imgs, self.im_sizes[0], image_offset, self.gt_boxes, self.gt_classes, rels, proposals, self.train_anchor_inds)
                 return (self.imgs, self.im_sizes[0], image_offset,
                         self.gt_boxes, self.gt_classes, rels, proposals, self.train_anchor_inds)
+            #if len(self.fns):
+            #    print("hi")
+            #    return (self.fns, self.imgs, self.im_sizes[0], image_offset, self.gt_boxes, self.gt_classes, rels, proposals, self.train_anchor_inds)
             return self.imgs, self.im_sizes[0], image_offset, self.gt_boxes, self.gt_classes, rels, proposals
 
         # Otherwise proposals is None
         assert proposals is None
-
+        
         image_offset = self.batch_size_per_gpu * index
         # TODO: Return a namedtuple
         if self.is_train:
+            #if len(self.fns):
+            #    print("hi")
+            #    return (self.fns, self.imgs, self.im_sizes[0], image_offset, self.gt_boxes, self.gt_classes, rels, proposals, self.train_anchor_inds)
             return (
             self.imgs[index], self.im_sizes[index], image_offset,
             self.gt_boxes[index], self.gt_classes[index], rels_i, None, self.train_anchor_inds[index])
+        #if len(self.fns):
+        #    print("hi")
+        #    return (self.fns, self.imgs, self.im_sizes[0], image_offset, self.gt_boxes, self.gt_classes, rels, proposals, self.train_anchor_inds)
         return (self.imgs[index], self.im_sizes[index], image_offset,
                 self.gt_boxes[index], self.gt_classes[index], rels_i, None)
 

@@ -61,7 +61,7 @@ ind_to_predicates = train.ind_to_predicates
 ind_to_classes = train.ind_to_classes
 
 
-def visualize_pred(fn, pred_entry, ind_to_classes, ind_to_predicates, image_dir, graph_dir, save_format='pdf'):
+def visualize_pred(fn, pred_entry, ind_to_classes, ind_to_predicates, image_dir, graph_dir, save_format='jpg'): #save_format='pdf'):
     #im = mpimg.imread(os.path.join('/home/suji/spring20/vilbert_beta/data/VCR/vcr1images/lsmdc_1049_Harry_Potter_and_the_chamber_of_secrets', fn))
     im = mpimg.imread(fn)
     max_len = max(im.shape)
@@ -81,10 +81,12 @@ def visualize_pred(fn, pred_entry, ind_to_classes, ind_to_predicates, image_dir,
     obj_count = np.zeros(151, dtype=np.int32)
     object_name_list_pred = []
     obj_count_pred = np.zeros(151, dtype=np.int32)
+    '''
     print('len roi:',len(rois))
     print('len pred_classes_str:', len(pred_classes))
     print("len(pred_rel_inds):", len(pred_rel_inds))
     print("(pred_rel_inds):", (pred_rel_inds))
+    '''
     sg_save_fn = os.path.join(graph_dir, "_".join([fn.split('/')[-2], os.path.basename(fn)[:-4]+'.'+save_format]))
     u = Digraph('sg', filename=sg_save_fn, format=save_format)
     u.attr('node', shape='box')
@@ -109,10 +111,12 @@ def visualize_pred(fn, pred_entry, ind_to_classes, ind_to_predicates, image_dir,
         if (score_list[ind]> .01):
             keep_r.add(row_no)
             print('rel_score:', score_list[ind])
+    '''
     print('pred_rel:', len(pred_rels))
     print('keep_r len:', len(keep_r))
+    '''
     pred_rels = np.take(pred_rels, list(keep_r), axis = 0)
-    print('pred_rel:', len(pred_rels))
+    #print('pred_rel:', len(pred_rels))
     #pred_rels = pred_rels[:top_k]
     obj_inds = set()
     for rel in pred_rels:
@@ -149,13 +153,12 @@ def visualize_pred(fn, pred_entry, ind_to_classes, ind_to_predicates, image_dir,
     plt.close()
 
 
-
-
 with open(args.cache_dir, 'rb') as f:
     all_pred_entries = pkl.load(f)
 print("pred entries loaded")
 for i, pred_entry in enumerate(tqdm(all_pred_entries)):
-    fn = vcrdata.filenames[i]
-    print("filename:",fn)
+    print("my fn", vcrdata.filenames[i])
+    fn = pred_entry['fn']#vcrdata.filenames[i]
+    print("other fn", fn)
     visualize_pred(fn, pred_entry, ind_to_classes, ind_to_predicates, image_dir=image_dir, graph_dir=graph_dir)
 

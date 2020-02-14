@@ -389,6 +389,7 @@ def vg_collate(data, num_gpus=3, is_train=False, mode='det'):
                 batch_size_per_gpu=len(data) // num_gpus)
     for d in data:
         blob.append(d)
+        #print('d',d)
     blob.reduce()
     return blob
 
@@ -436,6 +437,7 @@ class VCRDataset(Dataset):
                             '1049_Harry_Potter_and_the_chamber_of_secrets_00.02.01.100-00.02.05.445@1.jpg']
         '''
         self.filenames = glob.glob('/home/suji/spring20/vilbert_beta/data/VCR/vcr1images/*/*.jpg')[:100]
+        print("VCRDataset filenames:", self.filenames)
         tform = [
             SquarePad(),
             Resize(IM_SCALE),
@@ -470,6 +472,7 @@ class VCRDataset(Dataset):
             'flipped': False,
             'fn': self.filenames[index],
         }
+        print('visual_genome entry[fn]', entry['fn'])
         return entry
 
 
