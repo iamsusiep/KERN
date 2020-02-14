@@ -61,7 +61,7 @@ ind_to_predicates = train.ind_to_predicates
 ind_to_classes = train.ind_to_classes
 
 
-def visualize_pred(fn, pred_entry, ind_to_classes, ind_to_predicates, image_dir, graph_dir, save_format='jpg'): #save_format='pdf'):
+def visualize_pred(fn, pred_entry, ind_to_classes, ind_to_predicates, image_dir, graph_dir, save_format='pdf'):#save_format='jpg'): #
     #im = mpimg.imread(os.path.join('/home/suji/spring20/vilbert_beta/data/VCR/vcr1images/lsmdc_1049_Harry_Potter_and_the_chamber_of_secrets', fn))
     im = mpimg.imread(fn)
     max_len = max(im.shape)
@@ -87,7 +87,7 @@ def visualize_pred(fn, pred_entry, ind_to_classes, ind_to_predicates, image_dir,
     print("len(pred_rel_inds):", len(pred_rel_inds))
     print("(pred_rel_inds):", (pred_rel_inds))
     '''
-    sg_save_fn = os.path.join(graph_dir, "_".join([fn.split('/')[-2], os.path.basename(fn)[:-4]+'.'+save_format]))
+    sg_save_fn = os.path.join(graph_dir, "_".join([fn.split('/')[-2], os.path.basename(fn).replace('jpg', save_format)]))
     u = Digraph('sg', filename=sg_save_fn, format=save_format)
     u.attr('node', shape='box')
     u.body.append('size="6,6"')
@@ -148,7 +148,7 @@ def visualize_pred(fn, pred_entry, ind_to_classes, ind_to_predicates, image_dir,
     ax.axis('off')
     fig.tight_layout()
     #image_save_fn = os.path.join(image_dir, fn.split('/')[-1].split('.')[-2]+'.'+save_format)
-    image_save_fn = os.path.join(image_dir,"_".join([fn.split('/')[-2], os.path.basename(fn)[:-4]+'.'+save_format]))
+    image_save_fn = os.path.join(image_dir,"_".join([fn.split('/')[-2], os.path.basename(fn).replace('jpg', save_format)]))
     plt.savefig(image_save_fn)
     plt.close()
 
