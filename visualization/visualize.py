@@ -53,7 +53,7 @@ train,_, _ = VG.splits(num_val_im=conf.val_size, filter_duplicate_rels=True,
                          filter_non_overlap=conf.mode == 'sgdet')
 '''
 vcrdata = VCRDataset()
-vcrdataloader = DataLoader(vcrdata, batch_size=1, shuffle=True,
+vcrdataloader = DataLoader(vcrdata, batch_size=1, shuffle=False,
            batch_sampler=None, num_workers=1, collate_fn=lambda x: vg_collate(x, mode='rel', num_gpus=1, is_train=False), drop_last=True)
 
 

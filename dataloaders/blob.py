@@ -217,8 +217,8 @@ class Blob(object):
         if index == 0 and self.num_gpus == 1:
             image_offset = 0
             if self.is_train:
-                if len(self.fns):
-                    return (self.fns, self.imgs, self.im_sizes[0], image_offset, self.gt_boxes, self.gt_classes, rels, proposals, self.train_anchor_inds)
+                #if len(self.fns):
+                #    return (self.fns, self.imgs, self.im_sizes[0], image_offset, self.gt_boxes, self.gt_classes, rels, proposals, self.train_anchor_inds)
                 return (self.imgs, self.im_sizes[0], image_offset,
                         self.gt_boxes, self.gt_classes, rels, proposals, self.train_anchor_inds)
             #if len(self.fns):

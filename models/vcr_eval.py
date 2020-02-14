@@ -19,7 +19,7 @@ train, val, test = VG.splits(num_val_im=conf.val_size, filter_duplicate_rels=Tru
                           filter_non_overlap=conf.mode == 'sgdet')
 vcrdata = VCRDataset()
 
-vcrdataloader = DataLoader(vcrdata, batch_size=conf.batch_size * conf.num_gpus, shuffle=True,
+vcrdataloader = DataLoader(vcrdata, batch_size=conf.batch_size * conf.num_gpus, shuffle=False,
            batch_sampler=None, num_workers=conf.num_workers, collate_fn=lambda x: vg_collate(x, mode='rel', num_gpus=conf.num_gpus, is_train=False), drop_last=True)
 
 detector = KERN(classes=train.ind_to_classes, rel_classes=train.ind_to_predicates,
