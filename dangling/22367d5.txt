@@ -1,7 +1,5 @@
 # KERN Visualization
-Run to detect with kern:`CUDA_VISIBLE_DEVICES=0 ./scripts/eval_vcr.sh`
-
-Run to detect with kern:`CUDA_VISIBLE_DEVICES=0 ./scripts/eval_vcr_all.sh`
+Run to detect with kern:`CUDA_VISIBLE_DEVICES=0 ./scripts/eval_kern_sgdet.sh`
 
 Run for visualization: `CUDA_VISIBLE_DEVICES=0 ./scripts/visualize.sh`
 
