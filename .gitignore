@@ -80,28 +80,6 @@ checkpoints/
 *.sage.py
 
 # dotenv
-.env
-
-# virtualenv
-.venv
-venv/
-ENV/
-
-# Spyder project settings
-.spyderproject
-.spyproject
-
-# Rope project settings
-.ropeproject
-
-# mkdocs documentation
-/site
-
-# mypy
-.mypy_cache/
-
-
-# others
 caches/
 data/stanford_filtered/VG-SGG-dicts.json
 data/stanford_filtered/VG-SGG.h5
@@ -118,3 +96,13 @@ visualization/save/
 
 visualization/vcr_saves/
 visualization/vcr_saves.zip
+
+concat.zip
+concat/
+concat_0.001.zip
+concat_vis_0.005.zip
+concat_vis_0.005/
+test/
+vis_0.005/
+visualization/vcr_saves_0.001/
+visualization/vcr_saves_0.005/
