@@ -304,7 +304,8 @@ class ObjectDetector(nn.Module):
             -1, len(self.classes), 4) if self.mode != 'gtbox' else None
 
         od_box_priors = rois[:, 1:]
-
+        print("ob box deltas", ob_box_deltas)
+        print("imsizes", im_sizes)
         if (not self.training and not self.mode == 'gtbox') or self.mode in ('proposals', 'refinerels'):
             nms_inds, nms_scores, nms_preds, nms_boxes_assign, nms_boxes, nms_imgs = self.nms_boxes(
                 od_obj_dists,

@@ -436,8 +436,7 @@ class VCRDataset(Dataset):
                             '1049_Harry_Potter_and_the_chamber_of_secrets_00.02.01.100-00.02.05.445@0.jpg',
                             '1049_Harry_Potter_and_the_chamber_of_secrets_00.02.01.100-00.02.05.445@1.jpg']
         '''
-        self.filenames = glob.glob('/home/suji/spring20/vilbert_beta/data/VCR/vcr1images/*/*.jpg')[:100]
-        print("VCRDataset filenames:", self.filenames)
+        self.filenames = glob.glob('/home/suji/spring20/vilbert_beta/data/VCR/vcr1images/*/*.jpg')
         tform = [
             SquarePad(),
             Resize(IM_SCALE),

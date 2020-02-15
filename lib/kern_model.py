@@ -430,6 +430,10 @@ class KERN(nn.Module):
         batch.scatter()
 
         if self.num_gpus == 1:
+            print("batch", batch)
+            print("self(*batch[0])", self(*batch[0]))
+            if batch ==  None:
+                return None
             return self(*batch[0])
 
         replicas = nn.parallel.replicate(self, devices=list(range(self.num_gpus)))

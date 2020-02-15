@@ -118,3 +118,13 @@ visualization/save/
 
 visualization/vcr_saves/
 visualization/vcr_saves.zip
+
+concat.zip
+concat/
+concat_0.001.zip
+concat_vis_0.005.zip
+concat_vis_0.005/
+test/
+vis_0.005/
+visualization/vcr_saves_0.001/
+visualization/vcr_saves_0.005/
