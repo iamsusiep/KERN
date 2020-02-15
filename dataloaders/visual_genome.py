@@ -471,7 +471,7 @@ class VCRDataset(Dataset):
             'flipped': False,
             'fn': self.filenames[index],
         }
-        print('visual_genome entry[fn]', entry['fn'])
+        #print('visual_genome entry[fn]', entry['fn'])
         return entry
 
 

@@ -37,20 +37,19 @@ ckpt = torch.load(conf.ckpt)
 all_pred_entries= []
 optimistic_restore(detector, ckpt['state_dict'])
 def val_batch(batch_num, b, thrs=(20, 50, 100)):
-    print('val_batch, type(b)',type(b))
-    print('b.get_fns()', b.get_fns())
+    #print('val_batch, type(b)',type(b))
+    #print('b.get_fns()', b.get_fns())
     assert len(b.get_fns()) == 1
-    det_res = detector[b]
+    det_vres = detector[b]
     if conf.num_gpus == 1:
-        if det_res:
-            det_res = [det_res]
+        det_res = [det_res]
     fn = b.get_fns()[0]
     for i, (boxes_i, objs_i, obj_scores_i, rels_i, pred_scores_i) in enumerate(det_res):
         assert np.all(objs_i[rels_i[:,0]] > 0) and np.all(objs_i[rels_i[:,1]] > 0)
         #print("entry", entry[0])
         #print("type entry", type(entry))
-        print('type fn',type(fn))
-        print(fn)
+        #print('type fn',type(fn))
+        #print(fn)
         pred_entry = {
             'pred_boxes': boxes_i * BOX_SCALE/IM_SCALE,
             'pred_classes': objs_i,
@@ -60,6 +59,7 @@ def val_batch(batch_num, b, thrs=(20, 50, 100)):
             'fn': fn
         }
         all_pred_entries.append(pred_entry)
+
 
 detector.eval()
 for val_b, batch in enumerate(tqdm(vcrdataloader)):
